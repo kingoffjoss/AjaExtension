@@ -21,13 +21,13 @@
     function normalizarTranscricao(texto) {
         let resultado = String(texto || '')
             .replace(/\s+/g, ' ')
-            .replace(/\s+([,.!?;:])/g, '$1')
-            .replace(/([,.!?;:])([^\s])/g, '$1 $2')
             .replace(/\bvirgula\b/gi, ',')
             .replace(/\bponto final\b/gi, '.')
             .replace(/\bponto\b/gi, '.')
             .replace(/\binterrogacao\b/gi, '?')
             .replace(/\bexclamacao\b/gi, '!')
+            .replace(/\s+([,.!?;:])/g, '$1')
+            .replace(/([,.!?;:])([^\s])/g, '$1 $2')
             .trim();
 
         if (!resultado) return '';
@@ -120,7 +120,7 @@
             'not-allowed': 'Microfone bloqueado. Libere o microfone no Chrome e tente novamente.',
             'service-not-allowed': 'O reconhecimento de voz foi bloqueado pelo navegador.',
             'no-speech': 'Nao ouvi nenhuma fala. Tente gravar novamente.',
-            audio-capture: 'Nao encontrei um microfone disponivel.',
+            'audio-capture': 'Nao encontrei um microfone disponivel.',
             network: 'Falha de rede no reconhecimento de voz.'
         };
         return mensagens[error] || 'Nao consegui continuar a transcricao de voz.';
