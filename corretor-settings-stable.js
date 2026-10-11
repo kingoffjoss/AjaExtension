@@ -2,7 +2,7 @@
     'use strict';
 
     const FLAG = '__AJA_CORRETOR_SETTINGS_STABLE_VERSION__';
-    const VERSION = 'modal-cheio-2026-10-11-2';
+    const VERSION = 'modal-cheio-2026-10-11-3';
     const STYLE_ID = 'aja-corretor-settings-stable-style-v2';
     const MODAL_ID = 'aja-corretor-settings-stable-modal';
     const KEY_CUSTOM_GEMINI = 'aja_voice_gemini_api_key';
@@ -355,7 +355,7 @@
         ['pointerdown', 'mousedown', 'mouseup', 'click', 'dblclick', 'focusin', 'keydown', 'keyup', 'input'].forEach((eventName) => {
             modal.addEventListener(eventName, (event) => {
                 event.stopPropagation();
-            }, true);
+            }, false);
         });
     }
 
