@@ -63,7 +63,7 @@ Configure:
 ```txt
 Source: Deploy from a branch
 Branch: main
-Folder: /root
+Folder: / (root)
 ```
 
 Depois de salvar, aguarde alguns minutos e teste:
