@@ -82,7 +82,14 @@ Write-Host "Arquivos alterados:"
 Write-Host $status
 
 git -C $CloneDir commit -m "Atualiza Aja Assistant para uso pelo GitHub Pages"
+if ($LASTEXITCODE -ne 0) {
+    throw "Commit falhou."
+}
+
 git -C $CloneDir -c http.sslBackend=openssl push origin $Branch
+if ($LASTEXITCODE -ne 0) {
+    throw "Push falhou. Autentique no GitHub e tente novamente."
+}
 
 Write-Host "Publicado com sucesso."
 Write-Host "Favorito content.js: https://kingoffjoss.github.io/AjaExtension/content.js"
