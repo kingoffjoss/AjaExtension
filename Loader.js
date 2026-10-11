@@ -4,10 +4,12 @@
     const THEME_ID = 'aja-extension-theme-loader';
     const CORRETOR_PATCH_ID = 'aja-extension-corretor-menu-patch-loader';
     const VOICE_FIX_ID = 'aja-extension-corretor-voice-fix-loader';
+    const SETTINGS_STABLE_ID = 'aja-extension-corretor-settings-stable-loader';
     const SCRIPT_URL = 'https://kingoffjoss.github.io/AjaExtension/content.js';
     const THEME_URL = 'https://kingoffjoss.github.io/AjaExtension/theme-brisanet-patch.js';
     const CORRETOR_PATCH_URL = 'https://kingoffjoss.github.io/AjaExtension/corretor-menu-patch.js';
     const VOICE_FIX_URL = 'https://kingoffjoss.github.io/AjaExtension/corretor-voice-fix.js';
+    const SETTINGS_STABLE_URL = 'https://kingoffjoss.github.io/AjaExtension/corretor-settings-stable.js';
 
     if (typeof window[CLEANUP_KEY] === 'function') {
         try {
@@ -51,13 +53,26 @@
         return true;
     }
 
+    function appendSettingsStable(doc, origem) {
+        appendScript(
+            doc,
+            SETTINGS_STABLE_ID,
+            SETTINGS_STABLE_URL,
+            null,
+            () => console.warn(`[AjaExtension] Nao consegui carregar a configuracao estavel do corretor (${origem}).`)
+        );
+    }
+
     function appendVoiceFix(doc, origem) {
         appendScript(
             doc,
             VOICE_FIX_ID,
             VOICE_FIX_URL,
-            null,
-            () => console.warn(`[AjaExtension] Nao consegui carregar a protecao da aba de voz (${origem}).`)
+            () => appendSettingsStable(doc, origem),
+            () => {
+                console.warn(`[AjaExtension] Nao consegui carregar a protecao da aba de voz (${origem}).`);
+                appendSettingsStable(doc, origem);
+            }
         );
     }
 
