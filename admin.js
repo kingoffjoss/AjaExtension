@@ -135,7 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
             itemSelecionadoIndex = -1;
             els.editorUi.style.display = 'grid';
             els.hotkeyGroup.style.visibility = arquivoAtual.includes('protocolos') ? 'hidden' : 'visible';
-            setStatus('Pronto!', '#00f0ff');
+            setStatus('Pronto!', '#0057B8');
             renderizarLista(els.filter.value);
         } catch (error) {
             console.error(error);
@@ -232,7 +232,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const json = await response.json();
             shaAtual = json.content.sha;
-            setStatus('Salvo!', '#2ecc71');
+            setStatus('Salvo!', '#0057B8');
             alert('Sucesso!');
         } catch (error) {
             console.error(error);
