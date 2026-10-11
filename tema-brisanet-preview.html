@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Previa Tema Brisanet</title>
+    <style>
+        :root {
+            --brisa-blue: #0057B8;
+            --brisa-blue-dark: #003B7A;
+            --brisa-orange: #FF8200;
+            --brisa-orange-dark: #D96B00;
+            --brisa-white: #FFFFFF;
+            --brisa-soft: #EAF4FF;
+            --brisa-border: #D6E4F2;
+            --brisa-text: #0F2742;
+            --brisa-deep: #071B31;
+            --brisa-navy: #0F2742;
+            --brisa-mid: #173B63;
+            --brisa-dark-border: #2B5F93;
+            --brisa-dark-muted: #D6E4F2;
+            --shadow: 0 16px 40px rgba(15, 39, 66, 0.14);
+            --dark-shadow: 0 18px 46px rgba(0, 0, 0, 0.38);
+        }
+
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: #F8FBFF;
+            color: var(--brisa-text);
+        }
+
+        .preview-page {
+            min-height: 100vh;
+            padding: 24px;
+            display: grid;
+            grid-template-columns: 360px 1fr;
+            gap: 24px;
+        }
+
+        .panel {
+            background: var(--brisa-white);
+            border: 1px solid var(--brisa-border);
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .panel-header {
+            background: var(--brisa-blue);
+            color: var(--brisa-white);
+            padding: 14px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-weight: 700;
+        }
+
+        .panel-header.orange { background: var(--brisa-orange); }
+        .panel-body { padding: 16px; }
+
+        .button-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 18px;
+        }
+
+        button, .fake-button {
+            border: 1px solid var(--brisa-blue-dark);
+            background: linear-gradient(135deg, var(--brisa-blue), #0072CE);
+            color: var(--brisa-white);
+            border-radius: 8px;
+            padding: 10px 14px;
+            font-weight: 700;
+            cursor: default;
+            box-shadow: 0 4px 10px rgba(0, 87, 184, 0.22);
+        }
+
+        button.secondary, .fake-button.secondary {
+            background: var(--brisa-white);
+            color: var(--brisa-blue);
+            border-color: var(--brisa-blue);
+            box-shadow: none;
+        }
+
+        button.orange, .fake-button.orange {
+            background: linear-gradient(135deg, var(--brisa-orange), var(--brisa-orange-dark));
+            border-color: var(--brisa-orange-dark);
+            color: var(--brisa-white);
+            box-shadow: 0 4px 10px rgba(255, 130, 0, 0.24);
+        }
+
+        .toolbar {
+            background: #FFFFFF;
+            border: 1px solid var(--brisa-border);
+            border-radius: 10px;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .toolbar .icon-btn {
+            width: 36px;
+            height: 36px;
+            display: grid;
+            place-items: center;
+            padding: 0;
+        }
+
+        .mini-dashboard {
+            margin-top: 18px;
+        }
+
+        .mini-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .stat-card {
+            background: linear-gradient(145deg, var(--brisa-soft), var(--brisa-white));
+            border: 1px solid var(--brisa-border);
+            border-radius: 12px;
+            padding: 14px;
+            text-align: center;
+        }
+
+        .stat-card span {
+            color: #52667A;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .stat-card strong {
+            display: block;
+            margin-top: 6px;
+            font-size: 24px;
+            color: var(--brisa-blue);
+        }
+
+        .progress-shell {
+            height: 8px;
+            background: var(--brisa-border);
+            border-radius: 999px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+
+        .progress-fill {
+            width: 68%;
+            height: 100%;
+            background: linear-gradient(90deg, var(--brisa-blue), var(--brisa-orange));
+        }
+
+        .fab-preview {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-top: 18px;
+        }
+
+        .fab {
+            width: 50px;
+            height: 50px;
+            border-radius: 999px;
+            display: grid;
+            place-items: center;
+            color: var(--brisa-white);
+            font-weight: 800;
+            box-shadow: 0 8px 18px rgba(15, 39, 66, 0.22);
+        }
+
+        .fab.main { background: linear-gradient(135deg, var(--brisa-blue), var(--brisa-orange)); }
+        .fab.blue { background: linear-gradient(135deg, var(--brisa-blue), var(--brisa-blue-dark)); }
+        .fab.orange { background: linear-gradient(135deg, var(--brisa-orange), var(--brisa-orange-dark)); }
+        .fab.white { background: var(--brisa-white); color: var(--brisa-blue); border: 1px solid var(--brisa-border); }
+
+        .dashboard {
+            min-height: 620px;
+            display: grid;
+            grid-template-columns: 230px 1fr;
+        }
+
+        .sidebar {
+            background: var(--brisa-soft);
+            border-right: 1px solid var(--brisa-border);
+            padding: 18px 0;
+        }
+
+        .brand {
+            padding: 0 18px 18px;
+            font-weight: 800;
+            color: var(--brisa-blue);
+            border-bottom: 1px solid var(--brisa-border);
+        }
+
+        .menu-item {
+            padding: 12px 18px;
+            color: #52667A;
+            border-left: 3px solid transparent;
+            font-weight: 650;
+        }
+
+        .menu-item.active {
+            color: var(--brisa-blue);
+            background: rgba(255, 130, 0, 0.10);
+            border-left-color: var(--brisa-orange);
+        }
+
+        .dashboard-main {
+            display: flex;
+            flex-direction: column;
+            background: var(--brisa-white);
+        }
+
+        .topbar {
+            background: var(--brisa-blue);
+            color: var(--brisa-white);
+            padding: 14px 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 800;
+        }
+
+        .cards {
+            padding: 18px;
+            display: grid;
+            grid-template-columns: repeat(3, minmax(160px, 1fr));
+            gap: 14px;
+        }
+
+        .dash-card {
+            border: 1px solid var(--brisa-border);
+            border-top: 4px solid var(--brisa-blue);
+            border-radius: 10px;
+            padding: 14px;
+            background: #FFFFFF;
+            min-height: 100px;
+        }
+
+        .dash-card.orange-border { border-top-color: var(--brisa-orange); }
+        .dash-card h4 { margin: 0 0 8px; color: var(--brisa-text); }
+        .dash-card p { margin: 0; color: #52667A; line-height: 1.4; }
+
+        .note {
+            margin-top: 16px;
+            padding: 12px;
+            background: var(--brisa-soft);
+            border: 1px dashed var(--brisa-blue);
+            border-radius: 10px;
+            color: var(--brisa-text);
+            font-size: 13px;
+        }
+
+        .dark-showcase {
+            grid-column: 1 / -1;
+            background: var(--brisa-deep);
+            border: 1px solid var(--brisa-dark-border);
+            border-radius: 14px;
+            padding: 24px;
+            color: var(--brisa-white);
+            box-shadow: var(--dark-shadow);
+        }
+
+        .dark-title {
+            display: flex;
+            justify-content: space-between;
+            gap: 18px;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+
+        .dark-title h2 {
+            margin: 6px 0 6px;
+            font-size: 28px;
+            letter-spacing: 0;
+        }
+
+        .dark-title p {
+            margin: 0;
+            color: var(--brisa-dark-muted);
+            line-height: 1.45;
+            max-width: 680px;
+        }
+
+        .theme-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 10px;
+            border-radius: 999px;
+            background: rgba(255, 130, 0, 0.15);
+            color: var(--brisa-white);
+            border: 1px solid rgba(255, 130, 0, 0.42);
+            font-size: 12px;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        .palette {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+
+        .swatch {
+            width: 34px;
+            height: 34px;
+            border-radius: 999px;
+            border: 2px solid rgba(255,255,255,0.24);
+            box-shadow: 0 6px 14px rgba(0,0,0,0.22);
+        }
+
+        .swatch.blue { background: var(--brisa-blue); }
+        .swatch.orange { background: var(--brisa-orange); }
+        .swatch.white { background: var(--brisa-white); }
+        .swatch.deep { background: var(--brisa-navy); }
+
+        .dark-layout {
+            display: grid;
+            grid-template-columns: 360px 1fr;
+            gap: 24px;
+        }
+
+        .dark-showcase .panel {
+            background: var(--brisa-navy);
+            border-color: var(--brisa-dark-border);
+            box-shadow: 0 10px 28px rgba(0,0,0,0.28);
+        }
+
+        .dark-showcase .panel-header {
+            background: var(--brisa-blue);
+        }
+
+        .dark-showcase .panel-header.orange {
+            background: var(--brisa-orange);
+        }
+
+        .dark-showcase .panel-body {
+            color: var(--brisa-white);
+        }
+
+        .dark-showcase .toolbar {
+            background: var(--brisa-mid);
+            border-color: var(--brisa-dark-border);
+        }
+
+        .dark-showcase button.secondary,
+        .dark-showcase .fake-button.secondary {
+            background: var(--brisa-navy);
+            color: var(--brisa-white);
+            border-color: var(--brisa-dark-border);
+        }
+
+        .dark-showcase .stat-card {
+            background: linear-gradient(145deg, var(--brisa-mid), var(--brisa-navy));
+            border-color: var(--brisa-dark-border);
+        }
+
+        .dark-showcase .stat-card span {
+            color: var(--brisa-dark-muted);
+        }
+
+        .dark-showcase .stat-card strong {
+            color: var(--brisa-white);
+        }
+
+        .dark-showcase .progress-shell {
+            background: var(--brisa-mid);
+        }
+
+        .dark-showcase .note {
+            background: rgba(0, 87, 184, 0.20);
+            border-color: var(--brisa-orange);
+            color: var(--brisa-white);
+        }
+
+        .dark-showcase textarea {
+            background: var(--brisa-deep);
+            color: var(--brisa-white);
+            border-color: var(--brisa-dark-border);
+        }
+
+        .dark-showcase textarea::placeholder {
+            color: var(--brisa-dark-muted);
+        }
+
+        .dark-showcase .dashboard {
+            border: 1px solid var(--brisa-dark-border);
+            background: var(--brisa-deep);
+            box-shadow: 0 10px 28px rgba(0,0,0,0.28);
+        }
+
+        .dark-showcase .sidebar {
+            background: var(--brisa-navy);
+            border-right-color: var(--brisa-dark-border);
+        }
+
+        .dark-showcase .brand {
+            color: var(--brisa-white);
+            border-bottom-color: var(--brisa-dark-border);
+        }
+
+        .dark-showcase .menu-item {
+            color: var(--brisa-dark-muted);
+        }
+
+        .dark-showcase .menu-item.active {
+            color: var(--brisa-white);
+            background: rgba(255, 130, 0, 0.18);
+            border-left-color: var(--brisa-orange);
+        }
+
+        .dark-showcase .dashboard-main {
+            background: var(--brisa-deep);
+        }
+
+        .dark-showcase .dash-card {
+            background: var(--brisa-navy);
+            border-color: var(--brisa-dark-border);
+        }
+
+        .dark-showcase .dash-card h4 {
+            color: var(--brisa-white);
+        }
+
+        .dark-showcase .dash-card p {
+            color: var(--brisa-dark-muted);
+        }
+
+        .real-tools-preview {
+            display: grid;
+            grid-template-columns: 90px minmax(280px, 340px) minmax(320px, 380px);
+            gap: 18px;
+            align-items: start;
+            margin-top: 24px;
+        }
+
+        .fab-column {
+            background: rgba(255,255,255,0.06);
+            border: 1px solid var(--brisa-dark-border);
+            border-radius: 14px;
+            padding: 12px;
+            display: grid;
+            gap: 10px;
+            justify-items: center;
+        }
+
+        .tool-dot {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            color: var(--brisa-white);
+            font-weight: 800;
+            box-shadow: 0 8px 18px rgba(0,0,0,0.28);
+            border: 1px solid transparent;
+        }
+
+        .tool-dot.blue { background: linear-gradient(135deg, var(--brisa-blue), #0072CE); }
+        .tool-dot.navy { background: linear-gradient(135deg, var(--brisa-blue-dark), var(--brisa-blue)); }
+        .tool-dot.orange { background: linear-gradient(135deg, var(--brisa-orange), var(--brisa-orange-dark)); }
+        .tool-dot.white { background: linear-gradient(135deg, var(--brisa-white), var(--brisa-soft)); color: var(--brisa-blue); border-color: var(--brisa-border); }
+        .tool-dot.mix { background: linear-gradient(135deg, var(--brisa-blue), var(--brisa-orange)); }
+
+        .manager-sample {
+            background: var(--brisa-navy);
+            border: 1px solid var(--brisa-dark-border);
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 12px 28px rgba(0,0,0,0.28);
+        }
+
+        .manager-sample header {
+            background: var(--brisa-blue);
+            padding: 12px 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--brisa-white);
+            font-weight: 800;
+            font-size: 13px;
+        }
+
+        .manager-body {
+            padding: 14px;
+        }
+
+        .status-display {
+            background: rgba(0, 87, 184, 0.16);
+            border: 1px solid var(--brisa-dark-border);
+            border-radius: 8px;
+            padding: 10px;
+            text-align: center;
+            margin-bottom: 14px;
+        }
+
+        .status-display strong {
+            color: var(--brisa-orange);
+        }
+
+        .manager-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 9px;
+        }
+
+        .manager-btn {
+            border-radius: 8px;
+            min-height: 38px;
+            display: grid;
+            place-items: center;
+            padding: 8px;
+            font-size: 12px;
+            font-weight: 800;
+            border: 1px solid transparent;
+            color: var(--brisa-white);
+        }
+
+        .manager-btn.blue { background: linear-gradient(135deg, var(--brisa-blue), #0072CE); border-color: var(--brisa-blue-dark); }
+        .manager-btn.navy { background: linear-gradient(135deg, var(--brisa-blue-dark), var(--brisa-blue)); border-color: var(--brisa-blue-dark); }
+        .manager-btn.orange { background: linear-gradient(135deg, var(--brisa-orange), var(--brisa-orange-dark)); border-color: var(--brisa-orange-dark); }
+        .manager-btn.white { background: linear-gradient(135deg, var(--brisa-white), var(--brisa-soft)); border-color: var(--brisa-border); color: var(--brisa-blue); }
+
+        .config-section {
+            border: 1px solid var(--brisa-dark-border);
+            background: var(--brisa-mid);
+            border-radius: 10px;
+            padding: 12px;
+            margin-bottom: 10px;
+        }
+
+        .config-section strong {
+            display: block;
+            color: var(--brisa-orange);
+            margin-bottom: 8px;
+            font-size: 13px;
+        }
+
+        .schedule-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            border-bottom: 1px dashed var(--brisa-dark-border);
+            padding: 5px 0;
+            font-size: 12px;
+            color: var(--brisa-white);
+        }
+
+        .schedule-row span:last-child {
+            color: var(--brisa-orange);
+        }
+
+        @media (max-width: 900px) {
+            .preview-page {
+                grid-template-columns: 1fr;
+            }
+
+            .dark-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .dark-title {
+                flex-direction: column;
+            }
+
+            .palette {
+                justify-content: flex-start;
+            }
+
+            .dashboard {
+                min-height: auto;
+                grid-template-columns: 170px 1fr;
+            }
+
+            .cards {
+                grid-template-columns: repeat(2, minmax(120px, 1fr));
+            }
+
+            .real-tools-preview {
+                grid-template-columns: 1fr;
+            }
+
+            .fab-column {
+                grid-template-columns: repeat(6, 48px);
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="preview-page">
+        <section>
+            <div class="panel">
+                <div class="panel-header">Botoes fora das ferramentas <span>Azul + Branco</span></div>
+                <div class="panel-body">
+                    <div class="toolbar">
+                        <button class="icon-btn secondary">⛓</button>
+                        <button class="icon-btn secondary">⚙</button>
+                        <button class="icon-btn orange">🌶</button>
+                        <button class="icon-btn secondary">🛡</button>
+                    </div>
+
+                    <div class="fab-preview">
+                        <div class="fab main">+</div>
+                        <div class="fab blue">ID</div>
+                        <div class="fab orange">IA</div>
+                        <div class="fab white">QR</div>
+                    </div>
+
+                    <div class="note">O botao da pimenta ficou laranja, e os botoes externos alternam azul, laranja e branco.</div>
+                </div>
+            </div>
+
+            <div class="panel mini-dashboard">
+                <div class="panel-header">Mini dashboard <span>Progresso azul/laranja</span></div>
+                <div class="panel-body">
+                    <div class="progress-shell"><div class="progress-fill"></div></div>
+                    <div class="mini-grid" style="margin-top:14px;">
+                        <div class="stat-card"><span>Unicas</span><strong>32</strong></div>
+                        <div class="stat-card"><span>TMA</span><strong>06:42</strong></div>
+                        <div class="stat-card"><span>TME</span><strong>01:18</strong></div>
+                        <div class="stat-card"><span>Balao</span><strong>9</strong></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel mini-dashboard">
+                <div class="panel-header orange">Ferramentas <span>Laranja no topo</span></div>
+                <div class="panel-body">
+                    <div class="button-row">
+                        <button>1 Min</button>
+                        <button>3 Min</button>
+                        <button>5 Min</button>
+                    </div>
+                    <div class="button-row">
+                        <span class="fake-button secondary">Resposta rapida</span>
+                        <span class="fake-button orange">Limpar</span>
+                    </div>
+                    <textarea style="width:100%;height:90px;border:1px solid var(--brisa-border);border-radius:8px;padding:10px;color:var(--brisa-text);" placeholder="Notas do agente"></textarea>
+                </div>
+            </div>
+        </section>
+
+        <section class="panel dashboard">
+            <aside class="sidebar">
+                <div class="brand">Brisanet Genesys</div>
+                <div class="menu-item active">Sistemas</div>
+                <div class="menu-item">Produtos</div>
+                <div class="menu-item">Manuais</div>
+                <div class="menu-item">Ferramentas</div>
+                <div class="menu-item">Contatos</div>
+            </aside>
+            <div class="dashboard-main">
+                <div class="topbar">
+                    <span>Dashboard Central</span>
+                    <div class="button-row" style="margin:0;">
+                        <button class="secondary">Tema</button>
+                        <button class="orange">Fechar</button>
+                    </div>
+                </div>
+                <div class="cards">
+                    <div class="dash-card">
+                        <h4>YODA</h4>
+                        <p>Cartao com borda azul para sistemas e atalhos principais.</p>
+                    </div>
+                    <div class="dash-card orange-border">
+                        <h4>Brisa Fibra</h4>
+                        <p>Cartao com borda laranja para destaque, produto ou alerta.</p>
+                    </div>
+                    <div class="dash-card">
+                        <h4>Protocolos</h4>
+                        <p>Botao principal azul e hover/acao em laranja.</p>
+                    </div>
+                    <div class="dash-card orange-border">
+                        <h4>Respostas</h4>
+                        <p>Fundo branco para leitura, sem roxo ou verde.</p>
+                    </div>
+                    <div class="dash-card">
+                        <h4>Calculadora</h4>
+                        <p>Controles em azul, acoes e limpeza em laranja.</p>
+                    </div>
+                    <div class="dash-card orange-border">
+                        <h4>Admin</h4>
+                        <p>Painel escuro em azul Brisanet, com botoes brancos e laranja.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="dark-showcase">
+            <div class="dark-title">
+                <div>
+                    <span class="theme-pill">Opcao escura</span>
+                    <h2>Tema escuro Brisanet</h2>
+                    <p>Base azul profunda para reduzir brilho, topo azul Brisanet, acoes em laranja e textos brancos para leitura rapida nos paineis.</p>
+                </div>
+                <div class="palette" aria-label="Paleta do tema escuro">
+                    <span class="swatch deep"></span>
+                    <span class="swatch blue"></span>
+                    <span class="swatch orange"></span>
+                    <span class="swatch white"></span>
+                </div>
+            </div>
+
+            <div class="dark-layout">
+                <section>
+                    <div class="panel">
+                        <div class="panel-header">Botoes externos <span>Escuro + Brisanet</span></div>
+                        <div class="panel-body">
+                            <div class="toolbar">
+                                <button class="icon-btn secondary">⛓</button>
+                                <button class="icon-btn secondary">⚙</button>
+                                <button class="icon-btn orange">🌶</button>
+                                <button class="icon-btn secondary">🛡</button>
+                            </div>
+
+                            <div class="fab-preview">
+                                <div class="fab main">+</div>
+                                <div class="fab blue">ID</div>
+                                <div class="fab orange">IA</div>
+                                <div class="fab white">QR</div>
+                            </div>
+
+                            <div class="note">A pimenta continua em laranja para acao de teste, com os outros atalhos em azul e branco.</div>
+                        </div>
+                    </div>
+
+                    <div class="panel mini-dashboard">
+                        <div class="panel-header">Mini dashboard <span>Modo escuro</span></div>
+                        <div class="panel-body">
+                            <div class="progress-shell"><div class="progress-fill"></div></div>
+                            <div class="mini-grid" style="margin-top:14px;">
+                                <div class="stat-card"><span>Unicas</span><strong>32</strong></div>
+                                <div class="stat-card"><span>TMA</span><strong>06:42</strong></div>
+                                <div class="stat-card"><span>TME</span><strong>01:18</strong></div>
+                                <div class="stat-card"><span>Balao</span><strong>9</strong></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel mini-dashboard">
+                        <div class="panel-header orange">Ferramentas <span>Destaque laranja</span></div>
+                        <div class="panel-body">
+                            <div class="button-row">
+                                <button>1 Min</button>
+                                <button>3 Min</button>
+                                <button>5 Min</button>
+                            </div>
+                            <div class="button-row">
+                                <span class="fake-button secondary">Resposta rapida</span>
+                                <span class="fake-button orange">Limpar</span>
+                            </div>
+                            <textarea style="width:100%;height:90px;border:1px solid var(--brisa-dark-border);border-radius:8px;padding:10px;" placeholder="Notas do agente"></textarea>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="panel dashboard">
+                    <aside class="sidebar">
+                        <div class="brand">Brisanet Genesys</div>
+                        <div class="menu-item active">Sistemas</div>
+                        <div class="menu-item">Produtos</div>
+                        <div class="menu-item">Manuais</div>
+                        <div class="menu-item">Ferramentas</div>
+                        <div class="menu-item">Contatos</div>
+                    </aside>
+                    <div class="dashboard-main">
+                        <div class="topbar">
+                            <span>Dashboard Central</span>
+                            <div class="button-row" style="margin:0;">
+                                <button class="secondary">Tema</button>
+                                <button class="orange">Fechar</button>
+                            </div>
+                        </div>
+                        <div class="cards">
+                            <div class="dash-card">
+                                <h4>YODA</h4>
+                                <p>Cartao escuro com borda azul para sistemas e atalhos principais.</p>
+                            </div>
+                            <div class="dash-card orange-border">
+                                <h4>Brisa Fibra</h4>
+                                <p>Borda laranja para destaque, produto ou alerta.</p>
+                            </div>
+                            <div class="dash-card">
+                                <h4>Protocolos</h4>
+                                <p>Contraste branco para leitura e acao primaria em azul.</p>
+                            </div>
+                            <div class="dash-card orange-border">
+                                <h4>Respostas</h4>
+                                <p>Painel de leitura sem roxo, verde ou tons fora da marca.</p>
+                            </div>
+                            <div class="dash-card">
+                                <h4>Calculadora</h4>
+                                <p>Controles em azul, limpar e alertas em laranja.</p>
+                            </div>
+                            <div class="dash-card orange-border">
+                                <h4>Admin</h4>
+                                <p>Fundo azul profundo com botoes brancos e laranja.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <div class="real-tools-preview">
+                <div class="fab-column" aria-label="Botoes flutuantes">
+                    <div class="tool-dot orange">X</div>
+                    <div class="tool-dot blue">💬</div>
+                    <div class="tool-dot white">☰</div>
+                    <div class="tool-dot orange">🔧</div>
+                    <div class="tool-dot white">▭</div>
+                    <div class="tool-dot navy">ID</div>
+                    <div class="tool-dot blue">⌨</div>
+                    <div class="tool-dot orange">■</div>
+                    <div class="tool-dot navy">☎</div>
+                    <div class="tool-dot mix">❖</div>
+                    <div class="tool-dot blue">🤖</div>
+                    <div class="tool-dot orange">🧮</div>
+                </div>
+
+                <div class="manager-sample">
+                    <header>
+                        <span>🛠️ Gerenciador</span>
+                        <span>22:34:29 &nbsp; 🌗 ⚙ [X]</span>
+                    </header>
+                    <div class="manager-body">
+                        <div class="status-display">Status: <strong>Disponivel (00:00:38)</strong></div>
+                        <div class="manager-grid" style="margin-bottom:12px;">
+                            <div class="manager-btn blue" style="grid-column:1 / -1;">Ligar Automacao</div>
+                            <div class="manager-btn blue">Disponivel</div>
+                            <div class="manager-btn navy">Na Fila</div>
+                            <div class="manager-btn orange">Refeicao</div>
+                            <div class="manager-btn white">Pausa auricular</div>
+                            <div class="manager-btn orange">Pausa Out</div>
+                            <div class="manager-btn navy">Treinamento</div>
+                            <div class="manager-btn white">Backoffice</div>
+                            <div class="manager-btn orange">Feedback</div>
+                            <div class="manager-btn navy">Particular</div>
+                            <div class="manager-btn white">Saude</div>
+                            <div class="manager-btn blue">Reuniao</div>
+                            <div class="manager-btn white">Fazer Logoff</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="manager-sample">
+                    <header>
+                        <span>⚙️ Config & Historico</span>
+                        <span>☀ [X]</span>
+                    </header>
+                    <div class="manager-body">
+                        <p style="margin:0 0 14px;color:var(--brisa-dark-muted);font-style:italic;font-size:12px;">Sem estatisticas.</p>
+                        <div class="config-section"><strong>🔔 Notificacoes</strong>Alertas visuais e avisos sonoros</div>
+                        <div class="config-section">
+                            <strong>⏰ Editar Horarios</strong>
+                            <div class="schedule-row"><span>17:40: Na fila</span><span>✎ X</span></div>
+                            <div class="schedule-row"><span>18:35: Pausa out</span><span>✎ X</span></div>
+                            <div class="schedule-row"><span>18:40: Pausa auricular</span><span>✎ X</span></div>
+                            <div class="schedule-row"><span>18:50: Na fila</span><span>✎ X</span></div>
+                        </div>
+                        <div class="config-section"><strong>📋 Historico Diario</strong>Nenhum registro.</div>
+                        <div class="manager-grid">
+                            <div class="manager-btn blue">Varredura</div>
+                            <div class="manager-btn white">Importar</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+</body>
+</html>
