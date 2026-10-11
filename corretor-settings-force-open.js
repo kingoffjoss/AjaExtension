@@ -2,15 +2,18 @@
     'use strict';
 
     const FLAG = '__AJA_CORRETOR_SETTINGS_FORCE_VERSION__';
-    const VERSION = 'force-modal-2026-10-11-1';
+    const VERSION = 'force-modal-2026-10-11-2';
     const STYLE_ID = 'aja-corretor-settings-force-style';
     const MODAL_ID = 'aja-corretor-settings-force-modal';
     const KEY_CUSTOM_GEMINI = 'aja_voice_gemini_api_key';
     const KEY_THEME = 'aja_voice_panel_theme';
+    const KEY_LAST_GEMINI_MODEL = 'aja_voice_gemini_model';
     const CURRENT_STABLE_VERSION = 'modal-cheio-2026-10-11-3';
 
     if (window[FLAG] === VERSION) return;
     window[FLAG] = VERSION;
+
+    let cachedGeminiModels = null;
 
     function mountPoint() {
         return document.body || document.documentElement;
@@ -41,8 +44,12 @@
     function setKey(value) {
         try {
             const cleaned = String(value || '').trim();
+            cachedGeminiModels = null;
             if (cleaned) localStorage.setItem(KEY_CUSTOM_GEMINI, cleaned);
-            else localStorage.removeItem(KEY_CUSTOM_GEMINI);
+            else {
+                localStorage.removeItem(KEY_CUSTOM_GEMINI);
+                localStorage.removeItem(KEY_LAST_GEMINI_MODEL);
+            }
         } catch (error) {
             console.warn('[Aja Corretor] Nao consegui salvar a chave da IA:', error);
         }
@@ -88,6 +95,89 @@
         return found.slice(0, 10);
     }
 
+    function getLastModel() {
+        try {
+            return localStorage.getItem(KEY_LAST_GEMINI_MODEL) || '';
+        } catch (error) {
+            return '';
+        }
+    }
+
+    function setLastModel(model) {
+        try {
+            if (model) localStorage.setItem(KEY_LAST_GEMINI_MODEL, model);
+            else localStorage.removeItem(KEY_LAST_GEMINI_MODEL);
+        } catch (error) {
+            console.warn('[Aja Corretor] Nao consegui salvar o modelo Gemini:', error);
+        }
+    }
+
+    function normalizeModelName(name) {
+        return String(name || '').replace(/^models\//, '').trim();
+    }
+
+    function scoreModel(name) {
+        const model = normalizeModelName(name).toLowerCase();
+        let score = 0;
+        if (model.includes('flash')) score += 100;
+        if (model.includes('lite')) score += 35;
+        if (model.includes('3.8')) score += 90;
+        else if (model.includes('3.7')) score += 80;
+        else if (model.includes('3.6')) score += 70;
+        else if (model.includes('3.5')) score += 60;
+        else if (model.includes('3.1')) score += 50;
+        else if (model.includes('2.5')) score += 40;
+        else if (model.includes('2.0')) score += 30;
+        if (model.includes('pro')) score -= 10;
+        if (/(preview|exp|experimental|live|embedding|embed|imagen|tts|native-audio|aqa)/i.test(model)) score -= 1000;
+        return score;
+    }
+
+    async function listGeminiGenerateModels(apiKey) {
+        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${encodeURIComponent(apiKey)}`);
+        const data = await response.json().catch(() => ({}));
+        if (!response.ok) {
+            throw new Error(data?.error?.message || `ListModels ${response.status}`);
+        }
+
+        const models = (data?.models || [])
+            .filter((model) => {
+                const methods = model.supportedGenerationMethods || model.supported_actions || [];
+                return methods.includes('generateContent');
+            })
+            .map((model) => normalizeModelName(model.name))
+            .filter(Boolean)
+            .sort((a, b) => scoreModel(b) - scoreModel(a));
+
+        if (!models.length) throw new Error('Nenhum modelo com generateContent foi liberado para essa chave.');
+        return models;
+    }
+
+    async function getCandidateModels(apiKey) {
+        if (cachedGeminiModels?.length) return cachedGeminiModels;
+
+        const remembered = normalizeModelName(getLastModel());
+        try {
+            const listed = await listGeminiGenerateModels(apiKey);
+            cachedGeminiModels = remembered
+                ? [remembered, ...listed.filter((model) => model !== remembered)]
+                : listed;
+            return cachedGeminiModels;
+        } catch (error) {
+            console.warn('[Aja Corretor] Nao consegui listar modelos Gemini, usando lista reserva:', error);
+            cachedGeminiModels = [
+                remembered,
+                'gemini-3.8-flash',
+                'gemini-3.6-flash',
+                'gemini-3.5-flash-lite',
+                'gemini-3.1-flash-lite',
+                'gemini-2.5-flash',
+                'gemini-2.0-flash'
+            ].filter(Boolean);
+            return cachedGeminiModels;
+        }
+    }
+
     async function askGeminiWithSavedKey(prompt) {
         const apiKey = getKey();
         if (!apiKey) throw new Error('Chave Gemini nao configurada.');
@@ -96,12 +186,12 @@
             contents: [{ parts: [{ text: String(prompt || '') }] }],
             generationConfig: { temperature: 0.2, maxOutputTokens: 2048 }
         };
-        const models = ['gemini-2.0-flash', 'gemini-1.5-flash', 'gemini-1.5-flash-latest'];
+        const models = await getCandidateModels(apiKey);
         let lastError = null;
 
         for (const model of models) {
             try {
-                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(apiKey)}`, {
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(apiKey)}`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(body)
@@ -112,8 +202,11 @@
                     continue;
                 }
                 const text = (data?.candidates?.[0]?.content?.parts || []).map((part) => part.text || '').join('\n').trim();
-                if (text) return text;
-                lastError = new Error('Gemini respondeu sem texto.');
+                if (text) {
+                    setLastModel(model);
+                    return text;
+                }
+                lastError = new Error(`O modelo ${model} respondeu sem texto.`);
             } catch (error) {
                 lastError = error;
             }
@@ -349,6 +442,8 @@
         }
         protectModal(modal);
 
+        const savedKey = getKey();
+        const savedModel = getLastModel();
         const candidates = listPossibleKeys();
         const cards = candidates.length
             ? candidates.map((item) => `<div class="card"><strong>${escapeHtml(item.key)}</strong><br>${escapeHtml(maskKey(item.value))}</div>`).join('')
@@ -359,13 +454,14 @@
                 <div>
                     <div class="modal-title">Configurações do Tradutor</div>
                     <div class="muted">Fonte da IA: ${escapeHtml(sourceLabel())}</div>
+                    <div class="muted">Modelo atual: ${escapeHtml(savedModel || 'sera detectado no teste')}</div>
                 </div>
                 <button id="aja-force-close" style="width:44px !important; min-width:44px !important;">×</button>
             </div>
             <div>
                 <label>Chave Gemini usada pelo tradutor</label>
-                <input id="aja-force-key" type="password" placeholder="${escapeHtml(maskKey(getKey()))}" autocomplete="off">
-                <div class="muted" style="margin-top:7px;">Ela fica salva só neste navegador em <strong>${KEY_CUSTOM_GEMINI}</strong>. Se salvar uma chave aqui, o tradutor passa a usar ela.</div>
+                <input id="aja-force-key" type="password" placeholder="${escapeHtml(savedKey ? `Chave salva: ${maskKey(savedKey)}` : 'Cole sua chave Gemini aqui')}" autocomplete="off">
+                <div class="muted" style="margin-top:7px;">Ela fica salva só neste navegador em <strong>${KEY_CUSTOM_GEMINI}</strong>. Depois de salvar, o teste detecta automaticamente um modelo liberado para sua chave.</div>
             </div>
             <div class="row">
                 <button id="aja-force-save">Salvar chave</button>
@@ -399,13 +495,14 @@
             const status = modal.querySelector('#aja-force-status');
             const value = input.value.trim();
             if (!value) {
-                status.textContent = 'Cole uma chave antes de salvar.';
+                status.textContent = savedKey ? `Ja existe uma chave salva: ${maskKey(savedKey)}.` : 'Cole uma chave antes de salvar.';
                 return;
             }
             setKey(value);
             installGeminiBridge();
-            status.textContent = `Chave salva: ${maskKey(value)}.`;
-            input.value = '';
+            input.placeholder = `Chave salva: ${maskKey(value)}`;
+            input.value = value;
+            status.textContent = `Chave salva: ${maskKey(value)}. Agora clique em Testar IA.`;
         };
         modal.querySelector('#aja-force-clear').onclick = () => {
             setKey('');
@@ -417,10 +514,16 @@
         };
         modal.querySelector('#aja-force-test').onclick = async () => {
             const status = modal.querySelector('#aja-force-status');
-            status.textContent = 'Testando IA...';
+            const input = modal.querySelector('#aja-force-key');
+            const typedKey = input.value.trim();
+            if (typedKey) {
+                setKey(typedKey);
+                installGeminiBridge();
+            }
+            status.textContent = 'Testando IA e detectando modelo disponivel...';
             try {
                 const response = await (getKey() ? askGeminiWithSavedKey('Responda somente com: OK') : (window.askGemini ? window.askGemini('Responda somente com: OK') : Promise.reject(new Error('Sem IA ativa'))));
-                status.textContent = `IA respondeu: ${String(response || '').slice(0, 90)}`;
+                status.textContent = `IA OK usando ${getLastModel() || 'modelo do Aja'}: ${String(response || '').slice(0, 90)}`;
             } catch (error) {
                 status.textContent = `Falha no teste: ${error.message || error}`;
             }
