@@ -23,15 +23,25 @@ Aja Completo
 Cole este codigo no campo URL:
 
 ```js
-javascript:(()=>{const LOADER_ID='aja-assistant-content-loader';const SCRIPT_URL='https://kingoffjoss.github.io/AjaExtension/content.js';const old=document.getElementById(LOADER_ID);if(old)old.remove();const s=document.createElement('script');s.id=LOADER_ID;s.src=SCRIPT_URL+'?v='+Date.now();s.onload=()=>alert('Aja Assistant completo carregado pelo favorito.');s.onerror=()=>alert('Nao consegui carregar content.js. Confira se ele foi publicado no GitHub Pages.');document.documentElement.appendChild(s);})();
+javascript:(()=>{const LOADER_ID='aja-assistant-bookmarklet-loader';const SCRIPT_URL='https://kingoffjoss.github.io/AjaExtension/Loader.js';const old=document.getElementById(LOADER_ID);if(old)old.remove();const s=document.createElement('script');s.id=LOADER_ID;s.src=SCRIPT_URL+'?v='+Date.now();s.onload=()=>alert('Aja Assistant carregado pelo favorito.');s.onerror=()=>alert('Nao consegui carregar o loader completo. Confira se o GitHub Pages do repositorio AjaExtension esta ativo.');document.documentElement.appendChild(s);})();
 ```
+
+Esse favorito carrega o `Loader.js`, que carrega o `content.js` e em seguida aplica o tema Brisanet por `theme-brisanet-patch.js`.
 
 ## Favorito alternativo
 
-Este carrega o `Loader.js`, que por sua vez carrega o `content.js`:
+Este carrega o `content.js` diretamente e depois aplica o tema Brisanet:
 
 ```js
-javascript:(()=>{const LOADER_ID='aja-assistant-bookmarklet-loader';const SCRIPT_URL='https://kingoffjoss.github.io/AjaExtension/Loader.js';const old=document.getElementById(LOADER_ID);if(old)old.remove();const s=document.createElement('script');s.id=LOADER_ID;s.src=SCRIPT_URL+'?v='+Date.now();s.onload=()=>alert('Aja Assistant carregado pelo favorito.');s.onerror=()=>alert('Nao consegui carregar o loader completo. Confira se o GitHub Pages do repositorio AjaExtension esta ativo.');document.documentElement.appendChild(s);})();
+javascript:(()=>{const LOADER_ID='aja-assistant-content-loader';const THEME_ID='aja-assistant-theme-loader';const SCRIPT_URL='https://kingoffjoss.github.io/AjaExtension/content.js';const THEME_URL='https://kingoffjoss.github.io/AjaExtension/theme-brisanet-patch.js';const old=document.getElementById(LOADER_ID);if(old)old.remove();const oldTheme=document.getElementById(THEME_ID);if(oldTheme)oldTheme.remove();const s=document.createElement('script');s.id=LOADER_ID;s.src=SCRIPT_URL+'?v='+Date.now();s.onload=()=>{const t=document.createElement('script');t.id=THEME_ID;t.src=THEME_URL+'?v='+Date.now();t.onload=()=>alert('Aja Assistant completo carregado pelo favorito.');t.onerror=()=>alert('Aja Assistant carregou, mas nao consegui aplicar o tema Brisanet.');document.documentElement.appendChild(t);};s.onerror=()=>alert('Nao consegui carregar content.js. Confira se ele foi publicado no GitHub Pages.');document.documentElement.appendChild(s);})();
+```
+
+## Previa do tema
+
+Depois que o GitHub Pages atualizar, abra:
+
+```txt
+https://kingoffjoss.github.io/AjaExtension/tema-brisanet-preview.html
 ```
 
 ## Publicar arquivos
@@ -71,4 +81,5 @@ Depois de salvar, aguarde alguns minutos e teste:
 ```txt
 https://kingoffjoss.github.io/AjaExtension/content.js
 https://kingoffjoss.github.io/AjaExtension/Loader.js
+https://kingoffjoss.github.io/AjaExtension/theme-brisanet-patch.js
 ```
