@@ -43,7 +43,7 @@
             document.documentElement.appendChild(style);
         }
 
-        style.textContent = `
+        const themeCss = `
             :root {
                 --brisanet-blue: #0057B8 !important;
                 --brisanet-blue-dark: #003B7A !important;
@@ -308,6 +308,10 @@
                 border: 1px solid #D6E4F2 !important;
             }
         `;
+
+        if (style.textContent !== themeCss) {
+            style.textContent = themeCss;
+        }
     }
 
     function recolorInlineElements() {
@@ -335,7 +339,15 @@
     applyPatch();
     setInterval(recolorInlineElements, 1000);
 
-    const observer = new MutationObserver(applyPatch);
+    let patchScheduled = false;
+    const observer = new MutationObserver(() => {
+        if (patchScheduled) return;
+        patchScheduled = true;
+        requestAnimationFrame(() => {
+            patchScheduled = false;
+            applyPatch();
+        });
+    });
     observer.observe(document.documentElement, { childList: true, subtree: true });
 
     console.log('[AjaExtension] Tema Brisanet aplicado.');
