@@ -5,11 +5,13 @@
     const CORRETOR_PATCH_ID = 'aja-extension-corretor-menu-patch-loader';
     const VOICE_FIX_ID = 'aja-extension-corretor-voice-fix-loader';
     const SETTINGS_STABLE_ID = 'aja-extension-corretor-settings-stable-loader';
+    const SETTINGS_FORCE_ID = 'aja-extension-corretor-settings-force-loader';
     const SCRIPT_URL = 'https://kingoffjoss.github.io/AjaExtension/content.js';
     const THEME_URL = 'https://kingoffjoss.github.io/AjaExtension/theme-brisanet-patch.js';
     const CORRETOR_PATCH_URL = 'https://kingoffjoss.github.io/AjaExtension/corretor-menu-patch.js';
     const VOICE_FIX_URL = 'https://kingoffjoss.github.io/AjaExtension/corretor-voice-fix.js';
     const SETTINGS_STABLE_URL = 'https://kingoffjoss.github.io/AjaExtension/corretor-settings-stable.js';
+    const SETTINGS_FORCE_URL = 'https://kingoffjoss.github.io/AjaExtension/corretor-settings-force-open.js';
 
     if (typeof window[CLEANUP_KEY] === 'function') {
         try {
@@ -53,13 +55,26 @@
         return true;
     }
 
+    function appendSettingsForce(doc, origem) {
+        appendScript(
+            doc,
+            SETTINGS_FORCE_ID,
+            SETTINGS_FORCE_URL,
+            null,
+            () => console.warn(`[AjaExtension] Nao consegui carregar o reparo das configuracoes do corretor (${origem}).`)
+        );
+    }
+
     function appendSettingsStable(doc, origem) {
         appendScript(
             doc,
             SETTINGS_STABLE_ID,
             SETTINGS_STABLE_URL,
-            null,
-            () => console.warn(`[AjaExtension] Nao consegui carregar a configuracao estavel do corretor (${origem}).`)
+            () => appendSettingsForce(doc, origem),
+            () => {
+                console.warn(`[AjaExtension] Nao consegui carregar a configuracao estavel do corretor (${origem}).`);
+                appendSettingsForce(doc, origem);
+            }
         );
     }
 
