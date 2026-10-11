@@ -37,7 +37,7 @@
         "*://*.mypurecloud.com.au/*",
         "*://*.pure.cloud/*"
       ],
-      "js": ["content.js", "theme-brisanet-patch.js", "corretor-menu-patch.js", "corretor-voice-fix.js", "corretor-settings-stable.js"],
+      "js": ["content.js", "theme-brisanet-patch.js", "corretor-menu-patch.js", "corretor-voice-fix.js", "corretor-settings-stable.js", "corretor-settings-force-open.js"],
       "all_frames": true,
       "run_at": "document_idle"
     }
@@ -52,7 +52,7 @@
   "options_page": "admin.html",
   "web_accessible_resources": [
     {
-      "resources": ["admin.html", "theme-brisanet-patch.js", "corretor-menu-patch.js", "corretor-voice-fix.js", "corretor-settings-stable.js"],
+      "resources": ["admin.html", "theme-brisanet-patch.js", "corretor-menu-patch.js", "corretor-voice-fix.js", "corretor-settings-stable.js", "corretor-settings-force-open.js"],
       "matches": ["<all_urls>"]
     }
   ]
