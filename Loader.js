@@ -3,9 +3,11 @@
     const SCRIPT_ID = 'aja-extension-content-loader';
     const THEME_ID = 'aja-extension-theme-loader';
     const CORRETOR_PATCH_ID = 'aja-extension-corretor-menu-patch-loader';
+    const VOICE_FIX_ID = 'aja-extension-corretor-voice-fix-loader';
     const SCRIPT_URL = 'https://kingoffjoss.github.io/AjaExtension/content.js';
     const THEME_URL = 'https://kingoffjoss.github.io/AjaExtension/theme-brisanet-patch.js';
     const CORRETOR_PATCH_URL = 'https://kingoffjoss.github.io/AjaExtension/corretor-menu-patch.js';
+    const VOICE_FIX_URL = 'https://kingoffjoss.github.io/AjaExtension/corretor-voice-fix.js';
 
     if (typeof window[CLEANUP_KEY] === 'function') {
         try {
@@ -49,6 +51,16 @@
         return true;
     }
 
+    function appendVoiceFix(doc, origem) {
+        appendScript(
+            doc,
+            VOICE_FIX_ID,
+            VOICE_FIX_URL,
+            null,
+            () => console.warn(`[AjaExtension] Nao consegui carregar a protecao da aba de voz (${origem}).`)
+        );
+    }
+
     function appendSupportScripts(doc, origem) {
         appendScript(
             doc,
@@ -62,8 +74,11 @@
             doc,
             CORRETOR_PATCH_ID,
             CORRETOR_PATCH_URL,
-            null,
-            () => console.warn(`[AjaExtension] Nao consegui carregar o patch do corretor (${origem}).`)
+            () => appendVoiceFix(doc, origem),
+            () => {
+                console.warn(`[AjaExtension] Nao consegui carregar o patch do corretor (${origem}).`);
+                appendVoiceFix(doc, origem);
+            }
         );
     }
 
