@@ -1,14 +1,15 @@
 (function instalarConfiguracaoEstavelCorretor() {
     'use strict';
 
-    const FLAG = '__AJA_CORRETOR_SETTINGS_STABLE__';
-    const STYLE_ID = 'aja-corretor-settings-stable-style';
+    const FLAG = '__AJA_CORRETOR_SETTINGS_STABLE_VERSION__';
+    const VERSION = 'modal-cheio-2026-10-11-2';
+    const STYLE_ID = 'aja-corretor-settings-stable-style-v2';
     const MODAL_ID = 'aja-corretor-settings-stable-modal';
     const KEY_CUSTOM_GEMINI = 'aja_voice_gemini_api_key';
     const KEY_THEME = 'aja_voice_panel_theme';
 
-    if (window[FLAG]) return;
-    window[FLAG] = true;
+    if (window[FLAG] === VERSION) return;
+    window[FLAG] = VERSION;
 
     function escapeHtml(value) {
         return String(value ?? '').replace(/[&<>"']/g, (char) => ({
@@ -146,110 +147,187 @@
         }
 
         style.textContent = `
-            #spell-main-panel #aja-voice-settings-modal,
-            #spell-main-panel #aja-voice-settings-modal.is-open {
+            html body #spell-main-panel > #aja-voice-settings-modal,
+            html body #spell-main-panel > #aja-voice-settings-modal.is-open {
                 display: none !important;
+                visibility: hidden !important;
+                pointer-events: none !important;
             }
-            #spell-main-panel {
-                width: min(660px, calc(100vw - 32px)) !important;
-                min-width: min(540px, calc(100vw - 32px)) !important;
-                max-height: min(800px, calc(100vh - 32px)) !important;
+            html body #spell-main-panel {
+                width: min(720px, calc(100vw - 28px)) !important;
+                min-width: min(560px, calc(100vw - 28px)) !important;
+                max-height: min(820px, calc(100vh - 28px)) !important;
                 resize: both !important;
             }
-            #spell-main-panel #panel-content-area {
-                min-height: 410px !important;
+            html body #spell-main-panel #panel-content-area {
+                min-height: 430px !important;
                 max-height: calc(100vh - 210px) !important;
                 overflow: auto !important;
             }
-            #spell-main-panel #voice-transcript-box {
+            html body #spell-main-panel #voice-transcript-box {
                 min-height: 210px !important;
             }
-            #spell-main-panel.aja-voice-dark {
+            html body #spell-main-panel.aja-voice-dark {
                 background: #0f2742 !important;
                 color: #fff !important;
                 border-color: #2b5f93 !important;
             }
-            #spell-main-panel.aja-voice-dark #panel-content-area,
-            #spell-main-panel.aja-voice-dark .panel-tabs,
-            #spell-main-panel.aja-voice-dark .panel-body {
+            html body #spell-main-panel.aja-voice-dark #panel-content-area,
+            html body #spell-main-panel.aja-voice-dark .panel-tabs,
+            html body #spell-main-panel.aja-voice-dark .panel-body {
                 background: #0f2742 !important;
                 color: #fff !important;
             }
-            #spell-main-panel.aja-voice-dark textarea,
-            #spell-main-panel.aja-voice-dark input {
+            html body #spell-main-panel.aja-voice-dark textarea,
+            html body #spell-main-panel.aja-voice-dark input {
                 background: #173b63 !important;
                 color: #fff !important;
                 border-color: #2b5f93 !important;
             }
-            #spell-main-panel.aja-voice-light {
+            html body #spell-main-panel.aja-voice-light {
                 background: #f8fbff !important;
                 color: #0f2742 !important;
             }
-            #${MODAL_ID} {
-                position: fixed;
-                z-index: 2147483647;
-                inset: 50%;
-                transform: translate(-50%, -50%);
-                width: min(560px, calc(100vw - 28px));
-                max-height: calc(100vh - 40px);
-                overflow: auto;
-                display: none;
-                flex-direction: column;
-                gap: 12px;
-                padding: 18px;
-                border-radius: 16px;
-                box-sizing: border-box;
-                font-family: Arial, sans-serif;
-                box-shadow: 0 28px 70px rgba(15, 39, 66, 0.46);
+            html body #${MODAL_ID} {
+                position: fixed !important;
+                top: 50% !important;
+                left: 50% !important;
+                right: auto !important;
+                bottom: auto !important;
+                transform: translate(-50%, -50%) !important;
+                width: min(660px, calc(100vw - 32px)) !important;
+                min-width: min(460px, calc(100vw - 32px)) !important;
+                min-height: min(520px, calc(100vh - 36px)) !important;
+                max-height: calc(100vh - 36px) !important;
+                overflow: hidden !important;
+                display: none !important;
+                grid-template-rows: auto auto auto auto 1fr auto !important;
+                gap: 14px !important;
+                padding: 20px !important;
+                border-radius: 18px !important;
+                box-sizing: border-box !important;
+                font-family: Arial, sans-serif !important;
+                box-shadow: 0 30px 80px rgba(15, 39, 66, 0.56) !important;
+                opacity: 1 !important;
+                visibility: visible !important;
+                pointer-events: auto !important;
             }
-            #${MODAL_ID}.is-open { display: flex; }
-            #${MODAL_ID}.dark {
-                background: #102a47;
-                color: #fff;
-                border: 1px solid #2b5f93;
+            html body #${MODAL_ID}.is-open {
+                display: grid !important;
             }
-            #${MODAL_ID}.light {
-                background: #fff;
-                color: #0f2742;
-                border: 1px solid #d6e4f2;
+            html body #${MODAL_ID}.dark {
+                background: #102a47 !important;
+                color: #fff !important;
+                border: 1px solid #2b5f93 !important;
             }
-            #${MODAL_ID} .modal-title { font-size: 18px; font-weight: 900; }
-            #${MODAL_ID} .muted { font-size: 12px; opacity: .82; line-height: 1.4; }
-            #${MODAL_ID} label { font-size: 12px; font-weight: 800; color: #ff8200; }
-            #${MODAL_ID} input {
-                width: 100%;
-                min-height: 42px;
-                border-radius: 10px;
-                border: 1px solid #2b5f93;
-                padding: 9px 11px;
-                box-sizing: border-box;
-                outline: none;
+            html body #${MODAL_ID}.light {
+                background: #fff !important;
+                color: #0f2742 !important;
+                border: 1px solid #d6e4f2 !important;
             }
-            #${MODAL_ID}.dark input { background: #173b63; color: #fff; }
-            #${MODAL_ID}.light input { background: #fff; color: #0f2742; border-color: #d6e4f2; }
-            #${MODAL_ID} .row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
-            #${MODAL_ID} button {
-                min-height: 38px;
-                border: 1px solid rgba(255,130,0,.75);
-                border-radius: 10px;
-                background: linear-gradient(135deg,#0057b8,#ff8200);
-                color: #fff;
-                font-weight: 800;
-                cursor: pointer;
+            html body #${MODAL_ID} * {
+                box-sizing: border-box !important;
             }
-            #${MODAL_ID} .card {
-                border-radius: 12px;
-                border: 1px solid rgba(0,87,184,.28);
-                background: rgba(0,87,184,.12);
-                padding: 10px;
-                font-size: 12px;
-                line-height: 1.4;
+            html body #${MODAL_ID} .modal-title {
+                font-size: 20px !important;
+                font-weight: 900 !important;
+                line-height: 1.15 !important;
             }
-            @media (max-width: 640px) {
-                #spell-main-panel { min-width: 0 !important; width: calc(100vw - 20px) !important; left: 10px !important; right: auto !important; }
-                #${MODAL_ID} .row { grid-template-columns: 1fr; }
+            html body #${MODAL_ID} .muted {
+                font-size: 12px !important;
+                opacity: .86 !important;
+                line-height: 1.45 !important;
+            }
+            html body #${MODAL_ID} label {
+                display: block !important;
+                margin-bottom: 7px !important;
+                font-size: 12px !important;
+                font-weight: 900 !important;
+                color: #ff8200 !important;
+                text-transform: uppercase !important;
+            }
+            html body #${MODAL_ID} input {
+                width: 100% !important;
+                min-height: 44px !important;
+                border-radius: 12px !important;
+                border: 1px solid #2b5f93 !important;
+                padding: 10px 12px !important;
+                outline: none !important;
+                font-size: 13px !important;
+            }
+            html body #${MODAL_ID}.dark input {
+                background: #173b63 !important;
+                color: #fff !important;
+            }
+            html body #${MODAL_ID}.light input {
+                background: #fff !important;
+                color: #0f2742 !important;
+                border-color: #d6e4f2 !important;
+            }
+            html body #${MODAL_ID} .row {
+                display: grid !important;
+                grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+                gap: 10px !important;
+            }
+            html body #${MODAL_ID} button {
+                min-height: 40px !important;
+                border: 1px solid rgba(255,130,0,.75) !important;
+                border-radius: 11px !important;
+                background: linear-gradient(135deg,#0057b8,#ff8200) !important;
+                color: #fff !important;
+                font-weight: 900 !important;
+                cursor: pointer !important;
+                text-align: center !important;
+                white-space: normal !important;
+            }
+            html body #${MODAL_ID} .card {
+                border-radius: 13px !important;
+                border: 1px solid rgba(0,87,184,.30) !important;
+                background: rgba(0,87,184,.14) !important;
+                padding: 11px !important;
+                font-size: 12px !important;
+                line-height: 1.45 !important;
+                overflow-wrap: anywhere !important;
+            }
+            html body #${MODAL_ID} .scroll-area {
+                min-height: 0 !important;
+                overflow: auto !important;
+                display: grid !important;
+                gap: 12px !important;
+                padding-right: 4px !important;
+            }
+            html body #${MODAL_ID} .key-grid {
+                display: grid !important;
+                grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)) !important;
+                gap: 9px !important;
+                margin-top: 8px !important;
+            }
+            @media (max-width: 760px) {
+                html body #spell-main-panel {
+                    min-width: 0 !important;
+                    width: calc(100vw - 20px) !important;
+                    left: 10px !important;
+                    right: auto !important;
+                }
+                html body #${MODAL_ID} {
+                    width: calc(100vw - 22px) !important;
+                    min-width: 0 !important;
+                    padding: 16px !important;
+                }
+                html body #${MODAL_ID} .row {
+                    grid-template-columns: 1fr !important;
+                }
             }
         `;
+    }
+
+    function hideOldSettingsModal() {
+        document.querySelectorAll('#spell-main-panel > #aja-voice-settings-modal').forEach((modal) => {
+            modal.classList.remove('is-open');
+            modal.style.setProperty('display', 'none', 'important');
+            modal.style.setProperty('visibility', 'hidden', 'important');
+            modal.style.setProperty('pointer-events', 'none', 'important');
+        });
     }
 
     function applyTheme() {
@@ -271,6 +349,16 @@
         }
     }
 
+    function protectModalEvents(modal) {
+        if (modal.dataset.ajaStableProtected === VERSION) return;
+        modal.dataset.ajaStableProtected = VERSION;
+        ['pointerdown', 'mousedown', 'mouseup', 'click', 'dblclick', 'focusin', 'keydown', 'keyup', 'input'].forEach((eventName) => {
+            modal.addEventListener(eventName, (event) => {
+                event.stopPropagation();
+            }, true);
+        });
+    }
+
     function buildModal() {
         let modal = document.getElementById(MODAL_ID);
         if (!modal) {
@@ -278,6 +366,7 @@
             modal.id = MODAL_ID;
             document.documentElement.appendChild(modal);
         }
+        protectModalEvents(modal);
 
         const candidates = listPossibleKeys();
         const cards = candidates.length
@@ -290,12 +379,12 @@
                     <div class="modal-title">Configurações do Tradutor</div>
                     <div class="muted">Fonte da IA: ${escapeHtml(sourceLabel())}</div>
                 </div>
-                <button id="aja-stable-close" style="width:42px; min-width:42px;">×</button>
+                <button id="aja-stable-close" style="width:44px !important; min-width:44px !important;">×</button>
             </div>
             <div>
                 <label>Chave Gemini usada pelo tradutor</label>
                 <input id="aja-stable-key" type="password" placeholder="${escapeHtml(maskKey(getKey()))}" autocomplete="off">
-                <div class="muted" style="margin-top:6px;">Ela fica salva só neste navegador em <strong>${KEY_CUSTOM_GEMINI}</strong>. Se salvar uma chave aqui, o tradutor passa a usar ela.</div>
+                <div class="muted" style="margin-top:7px;">Ela fica salva só neste navegador em <strong>${KEY_CUSTOM_GEMINI}</strong>. Se salvar uma chave aqui, o tradutor passa a usar ela.</div>
             </div>
             <div class="row">
                 <button id="aja-stable-save">Salvar chave</button>
@@ -307,13 +396,15 @@
                 <button id="aja-stable-light">Tema claro</button>
                 <button id="aja-stable-close2">Fechar</button>
             </div>
-            <div>
-                <label>Onde ele procura chave</label>
-                <div class="card" style="margin-top:8px;">Primeiro usa <strong>${KEY_CUSTOM_GEMINI}</strong>. Se ela estiver vazia, tenta usar o Assistente IA principal do Aja, quando ele estiver ativo.</div>
-            </div>
-            <div>
-                <label>Chaves parecidas encontradas</label>
-                <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:8px; margin-top:8px;">${cards}</div>
+            <div class="scroll-area">
+                <div>
+                    <label>Onde ele procura chave</label>
+                    <div class="card">Primeiro usa <strong>${KEY_CUSTOM_GEMINI}</strong>. Se ela estiver vazia, tenta usar o Assistente IA principal do Aja, quando ele estiver ativo.</div>
+                </div>
+                <div>
+                    <label>Chaves parecidas encontradas</label>
+                    <div class="key-grid">${cards}</div>
+                </div>
             </div>
             <div id="aja-stable-status" class="muted" style="min-height:18px;"></div>
         `;
@@ -359,27 +450,75 @@
 
     function openModal() {
         ensureStyle();
+        hideOldSettingsModal();
         buildModal();
         const modal = document.getElementById(MODAL_ID);
         modal?.classList.add('is-open');
         applyTheme();
     }
 
-    function closeModal() {
+    function closeModal(event) {
+        if (event) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
         document.getElementById(MODAL_ID)?.classList.remove('is-open');
+        hideOldSettingsModal();
+    }
+
+    function createHeaderButton(panel, id, text, title, onClick) {
+        const actions = panel?.querySelector('.panel-header-top > div:last-child');
+        if (!actions) return null;
+        const button = document.createElement('button');
+        button.className = 'btn-fix-all';
+        button.id = id;
+        button.textContent = text;
+        button.title = title;
+        button.addEventListener('click', onClick, true);
+        const closeButton = panel.querySelector('#btn-spell-close');
+        actions.insertBefore(button, closeButton || actions.firstChild);
+        return button;
+    }
+
+    function ensureHeaderButtons() {
+        const panel = getPanel();
+        if (!panel) return;
+
+        let themeButton = document.getElementById('btn-voice-theme');
+        if (!themeButton) {
+            themeButton = createHeaderButton(panel, 'btn-voice-theme', '☀', 'Alternar tema', (event) => {
+                event.preventDefault();
+                event.stopPropagation();
+                setTheme(getTheme() === 'dark' ? 'light' : 'dark');
+            });
+        }
+
+        let settingsButton = document.getElementById('btn-voice-settings');
+        if (!settingsButton) {
+            settingsButton = createHeaderButton(panel, 'btn-voice-settings', '⚙', 'Configurações do tradutor e IA', (event) => {
+                event.preventDefault();
+                event.stopPropagation();
+                openModal();
+            });
+        }
     }
 
     function replaceSettingsButton() {
+        ensureHeaderButtons();
         const button = document.getElementById('btn-voice-settings');
-        if (!button || button.dataset.ajaStableSettings === '1') return;
+        if (!button || button.dataset.ajaStableSettingsVersion === VERSION) return;
 
         const clone = button.cloneNode(true);
         clone.dataset.ajaStableSettings = '1';
-        clone.onclick = (event) => {
+        clone.dataset.ajaStableSettingsVersion = VERSION;
+        clone.textContent = '⚙';
+        clone.title = 'Configurações do tradutor e IA';
+        clone.onclick = null;
+        clone.addEventListener('click', (event) => {
             event.preventDefault();
             event.stopPropagation();
             openModal();
-        };
+        }, true);
         button.replaceWith(clone);
     }
 
@@ -387,10 +526,12 @@
         ensureStyle();
         installGeminiBridge();
         applyTheme();
+        hideOldSettingsModal();
         replaceSettingsButton();
     }
 
     ensureStyle();
     installGeminiBridge();
-    setInterval(enhance, 250);
+    window.__AJA_CORRETOR_SETTINGS_STABLE_TIMER_V2__ = window.setInterval(enhance, 120);
+    enhance();
 })();
