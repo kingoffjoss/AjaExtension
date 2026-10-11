@@ -37,6 +37,7 @@ if ($LASTEXITCODE -ne 0) {
 $filesToPublish = @(
     "manifest.json",
     "content.js",
+    "theme-brisanet-patch.js",
     "background.js",
     "popup.html",
     "popup.js",
@@ -52,7 +53,8 @@ $filesToPublish = @(
     "bookmarklet-carregador-completo.txt",
     "bookmarklet-content-completo.js",
     "bookmarklet-content-completo.txt",
-    "COMO_USAR_PELO_GITHUB.md"
+    "COMO_USAR_PELO_GITHUB.md",
+    "tema-brisanet-preview.html"
 )
 
 foreach ($file in $filesToPublish) {
@@ -93,4 +95,5 @@ if ($LASTEXITCODE -ne 0) {
 
 Write-Host "Publicado com sucesso."
 Write-Host "Favorito content.js: https://kingoffjoss.github.io/AjaExtension/content.js"
+Write-Host "Tema Brisanet: https://kingoffjoss.github.io/AjaExtension/theme-brisanet-patch.js"
 Write-Host "Favorito loader: https://kingoffjoss.github.io/AjaExtension/Loader.js"
