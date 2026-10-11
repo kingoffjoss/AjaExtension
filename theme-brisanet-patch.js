@@ -2,7 +2,7 @@
     'use strict';
 
     const STYLE_ID = 'aja-brisanet-theme-patch';
-    const VERSION = 'brisanet-blue-orange-white-dark-v2';
+    const VERSION = 'brisanet-blue-orange-white-dark-v3';
     const themeColors = {
         bgPrimary: '#FFFFFF',
         bgSecondary: '#EAF4FF',
@@ -79,6 +79,97 @@
                 --purecloud-script-bubble-text-normal: #FFFFFF !important;
             }
 
+            .local-light-mode {
+                --purecloud-script-bg-primary: #F8FBFF !important;
+                --purecloud-script-bg-secondary: #EAF4FF !important;
+                --purecloud-script-text-primary: #0F2742 !important;
+                --purecloud-script-text-secondary: #52667A !important;
+                --purecloud-script-border-color: #D6E4F2 !important;
+                --purecloud-script-header-bg: #0057B8 !important;
+                --purecloud-script-accent-color: #FF8200 !important;
+                --purecloud-script-accent-text: #FFFFFF !important;
+            }
+
+            #purecloud-script-tools-panel.cc-escurinho,
+            #purecloud-script-mini-dashboard.cc-escurinho,
+            #central-dashboard.cc-escurinho,
+            .purecloud-script-popup.gcp-tema-escuro,
+            .qr-script-popup.cc-escurinho,
+            .pr-script-base-popup.cc-escurinho,
+            #gemini-wrapper.cc-escurinho {
+                --purecloud-script-bg-primary: #0F2742 !important;
+                --purecloud-script-bg-secondary: #173B63 !important;
+                --purecloud-script-text-primary: #FFFFFF !important;
+                --purecloud-script-text-secondary: #D6E4F2 !important;
+                --purecloud-script-border-color: #2B5F93 !important;
+                --purecloud-script-header-bg: #0057B8 !important;
+                --purecloud-script-accent-color: #FF8200 !important;
+                --purecloud-script-accent-text: #FFFFFF !important;
+                --cor-fundo-primario: #0F2742 !important;
+                --cor-fundo-secundario: #173B63 !important;
+                --cor-fundo-terciario: #214D7E !important;
+                --cor-fundo-hover: rgba(255, 130, 0, 0.16) !important;
+                --cor-texto-primario: #FFFFFF !important;
+                --cor-texto-secundario: #D6E4F2 !important;
+                --cor-texto-desabilitado: #8FB3D8 !important;
+                --cor-borda: #2B5F93 !important;
+                --cor-acento-primario: #FF8200 !important;
+                --cor-acento-hover: #0057B8 !important;
+                --cor-acento-texto: #FFFFFF !important;
+                --cor-perigo: #D96B00 !important;
+                --cor-sucesso: #0057B8 !important;
+                --cor-info: #FF8200 !important;
+                --pr-bg-primary: #0F2742 !important;
+                --pr-bg-secondary: #173B63 !important;
+                --pr-bg-tertiary: #214D7E !important;
+                --pr-text-primary: #FFFFFF !important;
+                --pr-text-secondary: #D6E4F2 !important;
+                --pr-border-color: #2B5F93 !important;
+                --pr-accent-color: #FF8200 !important;
+                --pr-accent-hover: #0057B8 !important;
+                --pr-danger-color: #D96B00 !important;
+            }
+
+            #purecloud-script-tools-panel.local-light-mode,
+            #purecloud-script-mini-dashboard.local-light-mode,
+            #central-dashboard.local-light-mode,
+            .purecloud-script-popup.local-light-mode,
+            .qr-script-popup.local-light-mode,
+            .pr-script-base-popup.local-light-mode,
+            #gemini-wrapper.local-light-mode {
+                --purecloud-script-bg-primary: #F8FBFF !important;
+                --purecloud-script-bg-secondary: #EAF4FF !important;
+                --purecloud-script-text-primary: #0F2742 !important;
+                --purecloud-script-text-secondary: #52667A !important;
+                --purecloud-script-border-color: #D6E4F2 !important;
+                --purecloud-script-header-bg: #0057B8 !important;
+                --purecloud-script-accent-color: #FF8200 !important;
+                --purecloud-script-accent-text: #FFFFFF !important;
+                --cor-fundo-primario: #F8FBFF !important;
+                --cor-fundo-secundario: #EAF4FF !important;
+                --cor-fundo-terciario: #D6E4F2 !important;
+                --cor-fundo-hover: rgba(255, 130, 0, 0.14) !important;
+                --cor-texto-primario: #0F2742 !important;
+                --cor-texto-secundario: #52667A !important;
+                --cor-texto-desabilitado: #6F8396 !important;
+                --cor-borda: #D6E4F2 !important;
+                --cor-acento-primario: #FF8200 !important;
+                --cor-acento-hover: #0057B8 !important;
+                --cor-acento-texto: #FFFFFF !important;
+                --cor-perigo: #D96B00 !important;
+                --cor-sucesso: #0057B8 !important;
+                --cor-info: #0057B8 !important;
+                --pr-bg-primary: #F8FBFF !important;
+                --pr-bg-secondary: #EAF4FF !important;
+                --pr-bg-tertiary: #D6E4F2 !important;
+                --pr-text-primary: #0F2742 !important;
+                --pr-text-secondary: #52667A !important;
+                --pr-border-color: #D6E4F2 !important;
+                --pr-accent-color: #FF8200 !important;
+                --pr-accent-hover: #0057B8 !important;
+                --pr-danger-color: #D96B00 !important;
+            }
+
             #purecloud-script-btn-endCustomer {
                 width: 34px !important;
                 min-width: 34px !important;
@@ -106,14 +197,15 @@
             }
 
             .purecloud-script-custom-btn {
-                background: #FFFFFF !important;
-                border: 1px solid #0057B8 !important;
-                color: #0057B8 !important;
+                background: linear-gradient(135deg, #0057B8 0%, #006AC8 45%, #FF8200 100%) !important;
+                border: 1px solid #FF8200 !important;
+                color: #FFFFFF !important;
+                box-shadow: 0 4px 10px rgba(0, 87, 184, 0.24) !important;
             }
 
             .purecloud-script-custom-btn:hover {
-                background: #FF8200 !important;
-                border-color: #D96B00 !important;
+                background: linear-gradient(135deg, #FF8200 0%, #0057B8 100%) !important;
+                border-color: #FFFFFF !important;
                 color: #FFFFFF !important;
             }
 
@@ -148,42 +240,87 @@
                 background: linear-gradient(90deg, #0057B8, #FF8200) !important;
             }
 
-            #uni-menu-container .uni-fab-main {
-                background: linear-gradient(135deg, #0057B8, #FF8200) !important;
+            #uni-menu-container .uni-fab-main,
+            #uni-menu-container .uni-fab-btn,
+            #qr-trigger-button,
+            #pr-trigger-button,
+            #bau-trigger-button,
+            #gemini-float-btn,
+            #monitor-trigger-btn,
+            #central-trigger-btn,
+            #car-float-btn {
+                background: linear-gradient(135deg, #0057B8 0%, #006AC8 42%, #FF8200 100%) !important;
                 color: #FFFFFF !important;
+                border: 1px solid rgba(255, 130, 0, 0.85) !important;
+                box-shadow: 0 8px 18px rgba(0, 87, 184, 0.32), 0 4px 12px rgba(255, 130, 0, 0.24) !important;
+            }
+
+            #uni-menu-container .uni-fab-main:hover,
+            #uni-menu-container .uni-fab-btn:hover,
+            #qr-trigger-button:hover,
+            #pr-trigger-button:hover,
+            #bau-trigger-button:hover,
+            #gemini-float-btn:hover,
+            #monitor-trigger-btn:hover,
+            #central-trigger-btn:hover,
+            #car-float-btn:hover {
+                background: linear-gradient(135deg, #FF8200 0%, #0057B8 100%) !important;
+                color: #FFFFFF !important;
+                border-color: #FFFFFF !important;
             }
 
             #uni-menu-container .uni-fab-main.active,
-            #uni-btn-bar,
-            #uni-btn-mon,
-            #uni-btn-tools {
-                background: linear-gradient(135deg, #FF8200, #D96B00) !important;
-                color: #FFFFFF !important;
-            }
-
             #uni-btn-id,
-            #uni-btn-car,
-            #uni-btn-ia {
-                background: linear-gradient(135deg, #003B7A, #0057B8) !important;
-                color: #FFFFFF !important;
-            }
-
-            #uni-btn-qr,
-            #uni-btn-calc {
-                background: linear-gradient(135deg, #0057B8, #0072CE) !important;
-                color: #FFFFFF !important;
-            }
-
-            #uni-btn-central {
-                background: linear-gradient(135deg, #0057B8, #FF8200) !important;
-                color: #FFFFFF !important;
-            }
-
+            #uni-btn-bar,
             #uni-btn-pr,
-            #uni-btn-copy {
-                background: linear-gradient(135deg, #FFFFFF, #EAF4FF) !important;
-                color: #0057B8 !important;
-                border: 1px solid #D6E4F2 !important;
+            #uni-btn-qr,
+            #uni-btn-ia,
+            #uni-btn-mon,
+            #uni-btn-central,
+            #uni-btn-copy,
+            #uni-btn-car,
+            #uni-btn-calc,
+            #uni-btn-tools {
+                background: linear-gradient(135deg, #0057B8 0%, #006AC8 42%, #FF8200 100%) !important;
+                color: #FFFFFF !important;
+                border: 1px solid rgba(255, 255, 255, 0.22) !important;
+            }
+
+            #uni-menu-container .uni-fab-btn::after {
+                background: #0F2742 !important;
+                color: #FFFFFF !important;
+                border: 1px solid #FF8200 !important;
+            }
+
+            .qr-script-button,
+            .pr-script-button,
+            .bau-tab-content button,
+            .bau-copy-btn,
+            #purecloud-script-tools-panel .purecloud-script-button,
+            #purecloud-script-tools-panel button:not(.panel-header-btn),
+            #spell-main-panel button,
+            #central-dashboard button:not(#btn-close-dashboard):not(#btn-central-theme),
+            .central-modal button,
+            #modal .btn.action {
+                background: linear-gradient(135deg, #0057B8 0%, #006AC8 45%, #FF8200 100%) !important;
+                color: #FFFFFF !important;
+                border: 1px solid rgba(255, 130, 0, 0.72) !important;
+                box-shadow: 0 4px 10px rgba(0, 87, 184, 0.22) !important;
+            }
+
+            .qr-script-button:hover,
+            .pr-script-button:hover,
+            .bau-tab-content button:hover,
+            .bau-copy-btn:hover,
+            #purecloud-script-tools-panel .purecloud-script-button:hover,
+            #purecloud-script-tools-panel button:not(.panel-header-btn):hover,
+            #spell-main-panel button:hover,
+            #central-dashboard button:not(#btn-close-dashboard):not(#btn-central-theme):hover,
+            .central-modal button:hover,
+            #modal .btn.action:hover {
+                background: linear-gradient(135deg, #FF8200 0%, #0057B8 100%) !important;
+                color: #FFFFFF !important;
+                border-color: #FFFFFF !important;
             }
 
             #pausa-script-container {
@@ -257,9 +394,9 @@
             #btn-backoffice,
             #btn-saude,
             #btn-logoff {
-                background: linear-gradient(135deg, #FFFFFF, #EAF4FF) !important;
-                color: #0057B8 !important;
-                border: 1px solid #D6E4F2 !important;
+                background: linear-gradient(135deg, #0057B8 0%, #006AC8 45%, #FF8200 100%) !important;
+                color: #FFFFFF !important;
+                border: 1px solid rgba(255, 130, 0, 0.72) !important;
                 text-shadow: none !important;
             }
 
@@ -303,15 +440,61 @@
             }
 
             #btn-importar-config {
-                background: linear-gradient(135deg, #FFFFFF, #EAF4FF) !important;
-                color: #0057B8 !important;
-                border: 1px solid #D6E4F2 !important;
+                background: linear-gradient(135deg, #0057B8 0%, #006AC8 45%, #FF8200 100%) !important;
+                color: #FFFFFF !important;
+                border: 1px solid rgba(255, 130, 0, 0.72) !important;
             }
         `;
 
         if (style.textContent !== themeCss) {
             style.textContent = themeCss;
         }
+    }
+
+    function syncThemeDefaults() {
+        const targets = [
+            { selector: '#purecloud-script-tools-panel', key: 'TOOLS_THEME', button: '#tools-btn-theme' },
+            { selector: '#purecloud-script-mini-dashboard', key: 'DASHBOARD_THEME', button: '#mini-dashboard-btn-theme' },
+            { selector: '.pr-script-popup', key: 'PR_THEME', button: '#pr-btn-theme' },
+            { selector: '.pr-script-settings-panel', key: 'PR_THEME' },
+            { selector: '.qr-script-popup', key: 'QR_THEME', button: '#qr-btn-theme' },
+            { selector: '.qr-script-settings-panel', key: 'QR_THEME' },
+            { selector: '#pausa-script-container', key: 'GERENCIADOR_THEME', button: '#btn-tema-gerenciador' },
+            { selector: '#pausa-script-config-container', key: 'GERCONFIG_THEME', button: '#config-btn-theme' },
+            { selector: '#central-dashboard', key: 'CENTRAL_THEME', button: '#btn-central-theme' },
+            { selector: '#gemini-wrapper', button: '#btn-theme' }
+        ];
+
+        targets.forEach(({ selector, key, button }) => {
+            document.querySelectorAll(selector).forEach(element => {
+                const hasLight = element.classList.contains('local-light-mode');
+                const hasDark = element.classList.contains('cc-escurinho') || element.classList.contains('gcp-tema-escuro');
+                let savedTheme = '';
+
+                try {
+                    savedTheme = key ? localStorage.getItem(key) || '' : '';
+                } catch (error) {
+                    savedTheme = '';
+                }
+
+                if (hasLight && hasDark) {
+                    if (savedTheme === 'light') {
+                        element.classList.remove('cc-escurinho', 'gcp-tema-escuro');
+                    } else {
+                        element.classList.remove('local-light-mode');
+                    }
+                } else if (!hasLight && !hasDark) {
+                    element.classList.add(savedTheme === 'light' ? 'local-light-mode' : 'cc-escurinho');
+                }
+
+                const themeButton = button ? element.querySelector(button) || document.querySelector(button) : null;
+                if (themeButton) {
+                    const isLight = element.classList.contains('local-light-mode');
+                    themeButton.textContent = isLight ? '☀️' : '🌗';
+                    themeButton.title = isLight ? 'Mudar para Tema Escuro' : 'Mudar para Tema Claro';
+                }
+            });
+        });
     }
 
     function recolorInlineElements() {
@@ -333,6 +516,7 @@
 
     function applyPatch() {
         ensureStyle();
+        syncThemeDefaults();
         recolorInlineElements();
     }
 
