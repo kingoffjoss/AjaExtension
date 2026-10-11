@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateUI() {
         if (isEnabled) {
             btnToggle.innerText = 'Desativar Script';
-            statusIndicator.style.background = '#10b981'; // Green
+            statusIndicator.style.background = '#0057B8'; // Green
         } else {
             btnToggle.innerText = 'Ativar Script';
             statusIndicator.style.background = '#ef4444'; // Red
