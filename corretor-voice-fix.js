@@ -2,7 +2,7 @@
     'use strict';
 
     const FLAG = '__AJA_CORRETOR_VOICE_FIX_VERSION__';
-    const VERSION = 'textarea-keep-open-2026-10-11';
+    const VERSION = 'textarea-keep-open-v2-2026-10-11';
     if (window[FLAG] === VERSION) return;
     window[FLAG] = VERSION;
 
@@ -34,29 +34,46 @@
         return Math.min(Math.max(value, min), max);
     }
 
-    function keepPanelOpen(checker, panel) {
-        if (checker) checker.__ajaKeepPanelOpenUntil = Date.now() + 2500;
-        if (panel) panel.style.display = 'flex';
+    function forceDisplay(checker, panel) {
+        if (!panel || panel.dataset.ajaAllowClose === '1') return;
+        const focusInPanel = isInsidePanel(document.activeElement, panel);
+        const focusInVoice = isVoiceTextarea(document.activeElement);
+        const keepOpen = checker?.__ajaKeepPanelOpenUntil && checker.__ajaKeepPanelOpenUntil > Date.now();
+
+        if (focusInPanel || focusInVoice || keepOpen) {
+            panel.style.display = 'flex';
+        }
     }
 
-    function releasePanel(checker) {
+    function keepPanelOpen(checker, panel) {
+        if (checker) checker.__ajaKeepPanelOpenUntil = Date.now() + 3000;
+        if (panel) panel.dataset.ajaAllowClose = '0';
+        forceDisplay(checker, panel);
+        setTimeout(() => forceDisplay(checker, panel), 0);
+        setTimeout(() => forceDisplay(checker, panel), 80);
+        setTimeout(() => forceDisplay(checker, panel), 220);
+        setTimeout(() => forceDisplay(checker, panel), 500);
+    }
+
+    function releasePanel(checker, panel) {
         if (checker) checker.__ajaKeepPanelOpenUntil = 0;
+        if (panel) panel.dataset.ajaAllowClose = '1';
     }
 
     function protectOcultarTudo(checker) {
-        if (!checker || checker.__ajaVoiceFixOcultarProtegidoV3) return;
+        if (!checker || checker.__ajaVoiceFixOcultarProtegidoV4) return;
 
         const originalOcultarTudo = typeof checker.ocultarTudo === 'function'
             ? checker.ocultarTudo.bind(checker)
             : null;
 
-        checker.__ajaVoiceFixOcultarProtegidoV3 = true;
+        checker.__ajaVoiceFixOcultarProtegidoV4 = true;
         checker.ocultarTudo = function ocultarTudoProtegido() {
             const panel = getPanel(this);
             const keepOpen = this.__ajaKeepPanelOpenUntil && this.__ajaKeepPanelOpenUntil > Date.now();
             const focusInside = isInsidePanel(document.activeElement, panel) && !isCloseButton(document.activeElement);
 
-            if ((keepOpen || focusInside) && panel?.style.display !== 'none') {
+            if ((keepOpen || focusInside) && panel?.style.display !== 'none' && panel?.dataset.ajaAllowClose !== '1') {
                 panel.style.display = 'flex';
                 return;
             }
@@ -69,14 +86,15 @@
     function protectVoiceTextarea(checker) {
         const panel = getPanel(checker);
         const textarea = panel?.querySelector('#voice-transcript-box');
-        if (!panel || !textarea || textarea.__ajaVoiceFixTextareaV3) return;
+        if (!panel || !textarea || textarea.__ajaVoiceFixTextareaV4) return;
 
-        textarea.__ajaVoiceFixTextareaV3 = true;
+        textarea.__ajaVoiceFixTextareaV4 = true;
 
         ['pointerdown', 'mousedown', 'mouseup', 'click', 'dblclick', 'focus', 'focusin'].forEach((eventName) => {
             textarea.addEventListener(eventName, (event) => {
                 keepPanelOpen(checker, panel);
                 event.stopPropagation();
+                event.stopImmediatePropagation();
             }, true);
         });
 
@@ -87,46 +105,37 @@
 
     function protectPanelFocus(checker) {
         const panel = getPanel(checker);
-        if (!panel || panel.__ajaVoiceFixPanelFocusV3) return;
+        if (!panel || panel.__ajaVoiceFixPanelFocusV4) return;
 
-        panel.__ajaVoiceFixPanelFocusV3 = true;
+        panel.__ajaVoiceFixPanelFocusV4 = true;
 
         panel.addEventListener('focusin', (event) => {
             if (isCloseButton(event.target)) return;
             keepPanelOpen(checker, panel);
         }, true);
 
-        panel.addEventListener('pointerdown', (event) => {
-            if (isCloseButton(event.target)) {
-                releasePanel(checker);
-                return;
-            }
+        ['pointerdown', 'mousedown', 'click'].forEach((eventName) => {
+            panel.addEventListener(eventName, (event) => {
+                if (isCloseButton(event.target)) {
+                    releasePanel(checker, panel);
+                    return;
+                }
 
-            if (isVoiceTextarea(event.target)) {
-                keepPanelOpen(checker, panel);
-                event.stopPropagation();
-            }
-        }, true);
-
-        panel.addEventListener('mousedown', (event) => {
-            if (isCloseButton(event.target)) {
-                releasePanel(checker);
-                return;
-            }
-
-            if (isVoiceTextarea(event.target)) {
-                keepPanelOpen(checker, panel);
-                event.stopPropagation();
-            }
-        }, true);
+                if (isVoiceTextarea(event.target)) {
+                    keepPanelOpen(checker, panel);
+                    event.stopPropagation();
+                    event.stopImmediatePropagation();
+                }
+            }, true);
+        });
     }
 
     function installStableDrag(checker) {
         const panel = getPanel(checker);
         const header = panel?.querySelector('.panel-header-top');
-        if (!panel || !header || header.__ajaStableDragReadyV3) return;
+        if (!panel || !header || header.__ajaStableDragReadyV4) return;
 
-        header.__ajaStableDragReadyV3 = true;
+        header.__ajaStableDragReadyV4 = true;
         header.style.cursor = 'move';
 
         let pending = null;
@@ -198,8 +207,8 @@
     }
 
     function protectDocumentEvents() {
-        if (document.__ajaVoiceFixDocumentProtegidoV3) return;
-        document.__ajaVoiceFixDocumentProtegidoV3 = true;
+        if (document.__ajaVoiceFixDocumentProtegidoV4) return;
+        document.__ajaVoiceFixDocumentProtegidoV4 = true;
 
         ['pointerdown', 'mousedown', 'click', 'focusin'].forEach((eventName) => {
             document.addEventListener(eventName, (event) => {
@@ -210,6 +219,7 @@
 
                 if (isVoiceTextarea(event.target)) {
                     event.stopPropagation();
+                    event.stopImmediatePropagation();
                 }
             }, true);
         });
@@ -224,10 +234,11 @@
         protectPanelFocus(checker);
         protectVoiceTextarea(checker);
         installStableDrag(checker);
+        forceDisplay(checker, panel);
 
         const status = panel.querySelector('#voice-status');
-        if (status && !window.askGemini && !status.__ajaVoiceFixIaHintV3) {
-            status.__ajaVoiceFixIaHintV3 = true;
+        if (status && !window.askGemini && !status.__ajaVoiceFixIaHintV4) {
+            status.__ajaVoiceFixIaHintV4 = true;
             const baseText = status.textContent.trim();
             if (!/chave de IA/i.test(baseText)) {
                 status.textContent = `${baseText} Dica: com a chave de IA ativa, as virgulas e a pontuacao ficam mais naturais.`;
@@ -235,12 +246,12 @@
         }
 
         const fixButton = panel.querySelector('#btn-voice-fix');
-        if (fixButton && !fixButton.__ajaVoiceFixTitleV3) {
-            fixButton.__ajaVoiceFixTitleV3 = true;
+        if (fixButton && !fixButton.__ajaVoiceFixTitleV4) {
+            fixButton.__ajaVoiceFixTitleV4 = true;
             fixButton.title = 'Com a IA ativa, esta correcao entende melhor contexto, virgulas e frases longas.';
         }
     }
 
     protectDocumentEvents();
-    setInterval(enhanceVoiceTab, 200);
+    setInterval(enhanceVoiceTab, 150);
 })();
